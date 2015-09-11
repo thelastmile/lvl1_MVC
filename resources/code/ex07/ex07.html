@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html ng-app="">
+
+  <head>
+  <link rel="stylesheet" type="text/css" href="ex07.css">
+    <script src="../../lib/angular.js"></script>
+  </head>
+
+  <body>
+    <input type="text" ng-model="myValue" />
+    <div ng-if="myValue=='5'" class="pass">
+      <p>You have entered 5</p>
+    </div>
+    <div ng-if="myValue!=='5'" class="fail">You haven't entered anything or entered something other than five.</div>
+  </body>
+
+</html>

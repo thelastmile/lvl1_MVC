@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>REST Intro</title>
+  <link rel="stylesheet" href="../styles.css" />
+
+</head>
+
+<body id="preview">
+    <h1><a id="RESTAPI_0"></a>REST-API</h1>
+
+    <h2><a id="What_is_an_API_2"></a>What is an API?</h2>
+
+    <p>An <strong><em>Application Programming Interface</em></strong> is a
+    software service/resource for other software to interact with. <img alt=
+    "API img" src="img/API.png" style="width:60%;"></p>
+
+   
+<h4>We can integrate existing software into our programs for:</h4>
+
+    <ul>
+        <li>Functionality</li>
+
+        <li>User Information</li>
+
+        <li>Program Data</li>
+    </ul>
+
+<h2>Who is providing APIs?</h2> 
+        <p>In a survey report released by Layer 7, 86.5%
+    of large organizations plan to have an API for open-consumption by 2018. By
+    2013, 10,000 APIs were on the market, quadruple the number available in
+    2010.
+   </p>
+    <p>Almost every mobile app uses APIs to retrieve and
+    manipulate data from a database. 
+
+     Here are just a few examples:</p>
+     
+
+     <img alt="Zap API img" src="img/zapapps.png"></p>
+
+    <h3>Where to find them:</h3> 
+
+    <p>Usually, just googling the company name
+    with “API” or “REST API” will allow you to locate existing
+    documentation.</p> 
+
+     <p>Popular APIs on the web include Facebook, Twitter,
+    Stripe and Google Maps.</p> 
+
+
+
+    <h3>Why do companies provide APIs?</h3>
+
+    <ul>
+        <li>Providing SaaS or PaaS (Software/Platform as a Service) allows a
+        company to remain integratable in emerging platforms and
+        technologies.</li>
+
+        <li>Mobile apps are an important frontier and factor heavily in daily
+        rituals. Web is not the only important platform any more for
+        developers.</li>
+
+        <li>Third-party application with their content influences back to their
+        brand and software.</li>
+
+        <li>Maintain friendly relations with developers and demonstrate
+        technical prowess.</li>
+    </ul>
+
+   <h2>Communicating with APIs</h2>  
+   <p>A good metaphor for computer protocol is
+    polite etiquette between humans. For courteous interaction, people interact
+    according to certain accepted rules. For computers, these rules are even
+    more specific, and we call them <b>protocols</b>. The most
+    common protocol on the web <b>HyperText Transfer
+    Protocol</b> (HTTP) specifies certain rules for the
+    request-response cycle. Many companies choose to adopt HTTP as the protocol
+    to access their APIs due to it’s ubiquity on the web.</p>
+
+    <h3>HTTP REQUESTS</h3>  <p>When you type <b>http://</b> in your browser, you are
+    essentially asking the browser to use the protocol “HTTP” when
+    communicating information to the server. You are specifying that this is
+    how your request will be formatted with the following properties:</p>
+
+    <ul>
+        <li>URL (Uniform Resource Locator)</li>
+
+        <li>Method</li>
+
+        <li>Headers</li>
+
+        <li>Body</li>
+    </ul>
+
+    <p>Let’s take an in-depth look at each one. 
+    <h4>URL</h4>
+    <p>The url field<em>specifies a unique address for the resource you are trying to
+    access</em>. A URL is URI (Uniform Resource Identifier) with the
+    means to locate said resource. What this means is, that the URL is the most
+    commonly used subset of URI’s due to providing accessibility to the actual
+    said resource [full path and means to retrieve data], instead of just
+    identifying it, like a less common URN (Uniform Resource Name).</p>
+
+    <h4>Method</h4> There are four common methods which specify exactly what your
+    HTTP request wants to do. The method is the “verb” of the request.
+    <h5>GET</h5>
+
+    <ul>
+        <li>Asks the server to retrieve a specified resource.</li>
+    </ul>
+
+    <h5>POST</h5>
+
+    <ul>
+        <li>Asks the server to create a new resource.</li>
+    </ul>
+
+    <h5>PUT</h5>
+
+    <ul>
+        <li>Asks the server to update an existing resource.</li>
+    </ul>
+
+    <h5>DELETE</h5>
+
+    <ul>
+        <li>Asks the server to delete an existing resource.</li>
+    </ul>
+
+    <h4>Headers</h4> <p>Include meta-data about a request, including time sent and
+    size of request body.</p>
+
+    <h4>Body</h4> <p>Contains the data that the client wants to send. The client has
+    complete control over what to include in this part while the rest must
+    follow a rigid HTTP protocol.</p>
+
+    <p><img alt="HTTP img" src="img/HTTP.png"></p>
+
+  <h3>HTTP Responses</h3>  
+    <p>Instead of a method and URL, HTTP responses include a
+    status code.</p>
+
+    <h4>Status Codes</h4> <p>Three-digit numbers that contain unique information
+    about the success of your request.</p>
+
+   <h5>Common Values</h5>
+
+    <ul>
+        <li>200 : Successful request!</li>
+
+        <li>404 : Not Found</li>
+
+        <li>503 : Our website/server is currently down</li>
+    </ul>
+
+    <p><img alt="Response img" src="img/response.png"></p>
+
+     <h3>Developer Tools: Network </h3> 
+     <p>Let’s see HTTP requests in action. Navigate
+    to your Developer Tools console and click on the Network tab. Then click
+    around on any page, you should see the fields populate with requests as
+    event handlers are triggered. <img alt="Network img" src=
+    "img/Network.png" style="width:80%;"></p>
+
+   <h2>AJAX for HTTP Requests - <i>Asynchronous Javascript And
+    XML</i> </h2> 
+
+
+     <p>Despite the name, use of XML to send data is
+    not required, and HTML or JSON is often used instead - particularly with
+    jQuery.
+    <br>
+     AJAX allows Web applications to send and receive data
+    from a server asynchronously. Because these events happen in the
+    background, they don’t interfere with the existing page’s display or
+    behavior.</p>
+
+   <h3>Why do we need AJAX?</h3>
+
+    <p>Without AJAX, a web page would need to be completely reloaded for every
+    change that takes place. That is quite inefficient and time consuming, and
+    makes for a bad user experience. Think about your Gmail account–imagine
+    that every time you wanted to see new messages, you had to refresh the page
+    completely. All your messages would be requested again and the entire page
+    (HTML, CSS, and JavaScript) would be rebuilt as well. But that isn’t what
+    happens. Instead, you can request only the new messages, and only update
+    the relevant parts of the page. That’s a whole lot quicker. AJAX is not
+    another programming language. It’s a technique that uses existing
+    JavaScript functionality to make asynchronous requests.</p>
+
+    <h3>Asynchronous</h3> 
+
+    <p>The programming you have done so far has been synchronous. Perhaps the
+    easiest way to think of this is that everything happens in order, and one
+    process doesn’t start until the process before it finishes. With
+    asynchronous programming, one part of your code can start running, and the
+    rest of your code can keep going even if that first part isn’t finished.
+    This is extremely useful for tasks that take a long time–for example,
+    requesting information from a server.</p>
+
+    <p>When your JavaScript code sends a request to a URL, and when it receives
+    a response, a callback function can be triggered to handle the response.
+    While waiting for the response, because AJAX is asynchronous, the rest of
+    your JavaScript code can continue to execute, and when you receive a
+    response, that event will trigger your callback function, which will then
+    process the returned data.</p>
+
+    <h3>What is JSON?</h3>
+     
+    <p>JSON stands for “JavaScript Object Notation”. A JSON
+    file looks like this:</p>
+    <pre>
+<code class="language-javascript">{
+    <span class="hljs-string">"book1"</span>: {
+        <span class="hljs-string">"title"</span>: <span class=
+"hljs-string">"The Hobbit"</span>,
+        <span class="hljs-string">"author"</span>: {
+            <span class="hljs-string">"name"</span>: <span class=
+"hljs-string">"J.R.R. Tolkien"</span>,
+            <span class="hljs-string">"nationality"</span>: <span class=
+"hljs-string">"English"</span>
+        },
+        <span class="hljs-string">"genres"</span>: [<span class=
+"hljs-string">"fantasy"</span>]
+    },
+    <span class="hljs-string">"book2"</span>: {
+        <span class="hljs-string">"title"</span>: <span class=
+"hljs-string">"Ender's Game"</span>,
+        <span class="hljs-string">"author"</span>: {
+            <span class="hljs-string">"name"</span>: <span class=
+"hljs-string">"Orson Scott Card"</span>,
+            <span class="hljs-string">"nationality"</span>: <span class=
+"hljs-string">"American"</span>
+        },
+        <span class="hljs-string">"genres"</span>: [<span class=
+"hljs-string">"science fiction"</span>]
+    }
+}
+</code>
+</pre>
+
+    <p>Note that in JSON, both the attributes and the values must be in
+    double-quotes.</p>
+
+    <p>Since the JSON syntax is a subset of JavaScript syntax, it does not need
+    to be translated or parsed to be used by JavaScript. You can still do
+    something like:</p>
+    <pre>
+<code>var books = { <span class="hljs-keyword">...</span> }
+console.log(books.book1.author.name);
+console.log(books.book2.genres[<span class="hljs-number">0</span>]);
+</code>
+</pre>
+
+<h4>Do It Yourself</h4>
+
+    <p>Create a new file called “books.json”. 
+    <br>
+     Inside, make a JSON
+    object that holds at least three books.
+    <br>
+     Each book should have the
+    following information:
+<br>
+</p>
+
+    <ul>
+        <li>Title</li>
+
+        <li>Author</li>
+
+        <li>Genre Use a &lt;a href=&quot;<a href=
+        "../resources/lib/jsonlintdotcom/index.html">JSON
+        Validator</a> to ensure you have written proper JSON.
+        </li>
+    </ul>
+
+</body>
+</html>

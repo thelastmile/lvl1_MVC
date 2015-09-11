@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="">
+
+  <head>
+  <link rel="stylesheet" type="text/css" href="ex12.css">
+   <script src="../../lib/angular.js"></script>
+  </head>
+
+  <body ng-init="numbers=[0,1,2,3,4,5]">
+    <nav>
+      <a href="#" ng-click="tab='numbers'" ng-class="{active:tab=='numbers'}">Numbers</a>
+      <a href="#" ng-click="tab='form'" ng-class="{active:tab=='form'}">Form</a>
+    </nav>
+    <div ng-switch="tab">
+      <div ng-switch-when="numbers">
+        <input type="text" ng-model="myValue" />
+        <h1 ng-repeat="number in numbers | filter:myValue track by $index">{{ number }}</h1>
+      </div>
+      <div ng-switch-when="form">
+        <form ng-submit="numbers.push(myNumber); $root.tab = 'numbers'">
+          <input type="number" ng-model="myNumber" required="" />
+          <input type="submit" />
+        </form>
+        <button ng-click="numbers.pop();$root.tab = 'numbers'">Pop</button>
+        <button ng-click="numbers.push(numbers.length);$root.tab = 'numbers'">Push</button>
+      </div>
+    </div>
+  </body>
+
+</html>

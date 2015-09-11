@@ -1,0 +1,185 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8" />
+    <title>Angular Templating and Data Binding</title>
+  <!-- stylesheets -->
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../highlight/styles/solarized_light.css">
+<script src="../highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+  <h1>Introduction to Angular Templating and Data Binding</h1>
+  <p>Think of a popular single page web app like Gmail. After you've logged in to a Gmail account, you can view different tabs and folders, and new emails will automatically appear in your inbox, all without the browser ever refreshing the entire page. Part of what makes all of this possible is templating and data binding. In order to make dynamic single page web apps you need a way to create user interfaces that change based on user inputs (for instance, clicking on your Sent Messages folder in Gmail) or changes to an underlying data model (new unopened emails arrive in your inbox).</p>
+  <p>In this section, you're going to learn all about templating and data binding in Angular.</p>
+<ul>
+  <li><b>Templating</b> allows you to define your views statically as regular HTML/CSS and add in placeholders which Angular will use to display actual data at runtime.</li>
+  <li><b>Data binding</b> is a feature of Angular that uses those placeholders used in templating to tie (or bind) the data shown on the page to the data in the code. In simple terms, if it changes in the controller, the change is immediately seen on the screen (the view). If it changes in the view, then it is also immediately changed in the controller.</li>
+</ul>
+<p>You'll also see how you can use Angular's built-in directives and filters to extend HTML. Angular's templating, directive and filter systems are tools used to create dynamic components that re-render whenever the underlying data changes. Although you will use some simple JavaScript expressions in a few places below, you'll be focusing on Angular elements that can be used in isolation of with any additional JavaScript code.</p>
+<p><i>Note - In real Angular projects, you will almost always be using other parts of the Angular stack and not just the templating components. For now, however, it's best to focus exclusively on the parts of Angular projects that live in HTML templates so you can learn it well.
+</i></p>
+<p>This section will cover several new and incredibly important Angular terms and concepts, and you are advised to read through this material slowly and deliberately. Specifically, you will encounter the following elements from the Angular framework:</p>
+<ul>
+  <li><b></b> ng-init</li>
+  <li><b></b> {{ }} curly braces</li>
+  <li><b></b> ng-app</li>
+  <li><b></b> ng-repeat</li>
+  <li><b></b> ng-click</li>
+  <li><b></b> ng-model</li>
+  <li><b></b> filter</li>
+  <li><b></b> ng-if</li>
+  <li><b></b> ng-switch</li>
+  <li><b></b> ng-switch-when</li>
+  <li><b></b> ng-switch-default</li>
+  <li><b></b> ng-class</li>
+  <li><b></b> ng-submit</li>
+</ul>
+<p>Your goal for this assignment is to have a mental model of how templating works in Angular and then to understand what each of these elements allows you to do in Angular templates. You will find sample files in '/resources/code/' with code examples to help introduce these ideas. You should spend time looking closely at both the output and the HTML code in each one. Bear in mind that you can manipulate the code in these files in Sublime text, so feel free to modify and experiment with each one.</p>
+<h2>Templating and Data Binding</h2>
+<p>If you've looked at much front end code, chances are you've come across something that looks like the following JavaScript code snippet, which is an attempt at templating and possibly data binding, depending on how it is used:</p>
+<pre>
+  <code class="html">
+    element.innerHTML = '&ltdiv class="' + classes + '"&gt' +
+                            '&lth1&gt' + title + '&lt/h1&gt' +
+                        '&lt/div&gt';
+  </code>
+</pre>
+<p>Assume that <span class="ilcode">classes</span> has been defined elsewhere, and that <span class="ilcode">element</span> is a DOM element selected somewhere with <span class="ilcode">document.getElementById()</span>. While you could easily use code like this to get dynamic styles and content on your static pages, there are some serious problems with this approach. The inner HTML content is directly housed within the JavaScript code and so are the data values (classes and title). This is <a href="../additionalReading/tightCoupling.pdf" target="blank">tightly coupled</a> code, which makes bugs more likely.</p>
+<p>A better approach to this problem would be to fully isolate the HTML, data, and JavaScript code. This way the HTML code can be modified independently of the data, and the JavaScript isn't responsible for defining all of the functionality. Breaking this up into separate components, your code might look something like this:</p>
+<p>The HTML:</p>
+<pre>
+  <code class="html">
+    &ltdiv class="{{ classes }}"&gt
+      &lth1&gt{{ title }}&lt/h1&gt
+    &lt/div&gt
+  </code>
+</pre>
+<p>The data:</p>
+<pre>
+  <code class="JavaScript">
+    data = {
+      classes : '...',
+      title : '...'
+    }
+  </code>
+</pre>
+<p>The JavaScript:</p>
+<pre>
+  <code class="JavaScript">
+   element.innerHTML = renderTemplate(htmlTemplate, data);
+  </code>
+</pre>
+<p>While this solution still sets the innerHTML of the element, it isolates the data and HTML code. This yields huge benefits since the HTML structure can be changed without breaking the data code and without any changes to the JavaScript code. The data can also be changed and extended, and the HTML template gets access to the data values through the curly brace expression syntax <span class="ilcode">{{ value }}</span>.</p>
+<p>Now, take this templating system and imagine a recurring cycle where the data can change state (based on changes to a data server, or based on user inputs in the UI) and the JavaScript functionality defined above gets called at regular intervals. This would produce a web page where UI components change as the data changes. This is, in a nutshell, what data binding is all about.</p>
+<p>Central to the Angular approach to templating and data binding is its scoping system, which acts like a local memory for the application. A scope is nothing more than a key-value pair storage system where you can have strings, numbers, arrays, objects, expressions, arithmetic operations, or functions as values. Angular also allows you to have hierarchical scopes which you will go into later. Controller scopes are only visible to the code in the controller, and the portion of the view that is controlled by the controller.</p>
+<p>When building an Angular app, you can reference scope values in your HTML templates. The scoping system is what makes the data binding possible. When a value changes within an Angular scope, any HTML referencing this scope can be re-rendered. With views, routing (which is how you load views by having Angular intercept URLs), and the extended HTML components Angular provides, your static templates come alive.</p>
+<h2>Templating and Data Binding in AngularJS</h2>
+<p>In Angular applications, your templates are static and your data is dynamic. When a data value changes, the browser renders the updates within the template; simple as that. Scope links the static HTML template and dynamic data. If a key value pair (say <span class="ilcode">foo: bar</span>) has been defined in the scope, the HTML template will be able to access <span class="ilcode">bar</span> by referencing the key <span class="ilcode">foo</span>, using curly braces <span class="ilcode">{{ foo }}</span>. As you'll see in a minute, the scope can also be referred to in expressions or directives, and can be used to introduce logic into your apps and extend HTML with new elements.</p>
+<p>Let's return to the example from above. The HTML template looked like this:</p>
+<pre>
+  <code class="html">
+    &ltdiv class="{{ classes }}"&gt
+      &lth1&gt{{ title }}&lt/h1&gt
+    &lt/div&gt
+  </code>
+</pre>
+<p>This would be a valid Angular HTML template. Assuming <span class="ilcode">classes</span> and <span class="ilcode">title</span> have been defined on the scope, the curly brace expressions will be replaced with the scope values. <span class="ilcode">{{ title }}</span> is bound to whatever value <span class="ilcode">title</span> has been set to in the scope. Later you'll see how to set scope values in an external JavaScript file like this, but for now, take a look at how scope values can be set directly in an an HTML template.</p>
+<p>You can see the working code for this example in the folder <b>'/resources/code/ex01/'</b>.</p>
+<p>Because Angular is loaded in the script tag and the 'ng-app' attribute is set in the opening 'html' tag, the HTML template will have access to Angular. <span class="ilcode">ng-init</span> is an Angular directive that allows you to set an initial value on the scope on page load. Here, the code says that when Angular initializes, it should set the key 'classes' to the value 'one two three' (in a real app you’d probably have CSS classes for .one .two and .three defined in a CSS file) and the key title to 'An excellent title'. Then, <span class="ilcode">{{ classes }}</span> and <span class="ilcode">{{ title }}</span> get access to these scope values.</p>
+<p>This is pretty good, but hard coding data values into the HTML template is not ideal. In Lesson 3 of this Unit, when you start to learn about controllers in Angular, you'll see how to get data assignment completely out of HTML.</p>
+<h3>Try It</h3>
+<p>Try adding a new variable to the ng-init declaration of the <b>ex01.html</b> file above, and displaying it in an HTML element using data binding.</p>
+<h2>What are all the new HTML attributes?</h2>
+<p>In the example above, you're adding some non-standard attributes to the HTML like <span class="ilcode">ng-init</span> and <span class="ilcode">ng-app</span>. These are built-in Angular directives. Directives extend the behavior of HTML. You already know that <span class="ilcode">ng-app</span> turns the HTML document into an Angular application and the <span class="ilcode">ng-init</span> directive evaluates an expression and sets scope values. Angular has dozens of these built-in directives, and it's good to note that they all use the 'ng-' prefix. This will become important when you begin writing custom directives. In order to avoid namespace collision, you'll want to abstain from using the 'ng-' prefix yourself. You can see the names of and descriptions for each built in directive <a href="../additionalReading/angularDirectives.pdf" target="blank">here</a> in the official docs.</p>
+<p>Let's see how some other Angular directives allow you to extend HTML. <span class="ilcode">ng-repeat</span> allows you to iterate over a collection of objects. Consider the code and output in the folder <b>'/resources/code/ex02/'</b>.</p>
+<p>First, <i>numbers</i> is set to an array of integers. Then, the <span class="ilcode">ng-repeat</span> directive is used to iterate over each item in numbers, printing out a string representation of the number to an <span class="ilcode">&lth1&gt</span> element.</p>
+<p>The <span class="ilcode">&lth1&gt</span> element containing <span class="ilcode">ng-repeat</span> has been cloned six times since the numbers variable contains an array that has six numbers. <span class="ilcode">ng-repeat</span> morphs the HTML code according to the state of the data it's accessing (in this case the numbers array set with <span class="ilcode">ng-init</span>). Here again you see data binding, though in this case an expression is not being used to render the content and is instead using a directive to dynamically change the layout of the page. This is a powerful feature that Angular gives you out of the box. If you wanted to implement this same functionality for iterating over a collection and manipulating the DOM using raw JavaScript, it would probably take at least 50 lines of JavaScript code.</p>
+<h3>Try It</h3>
+<p>Try creating a <span class="ilcode">&ltnav&gt</span> menu by adding a list of pages (for example, 'Home', 'Blog' and 'About Me') to an <span class="ilcode">ng-init</span> declaration, and displaying them using <span class="ilcode">ng-repeat</span>.</p>
+<h2>Making Interactive Templates</h2>
+<p>So far the templates are displaying data, but haven't given users a way to change the data and therefore the layout of the page. To make this happen, let's explore a few more directives.</p>
+<p>To capture user input, a special kind of binding is required. You need to be able to watch the value of user inputs and change your HTML if those values change. This is called <i>two way binding</i>, which means that you can bind HTML contents to scope values, <i>and</i> users can change the value of scope values by supplying inputs.</p>
+<p>Using standard JavaScript or jQuery, one might watch for <span class="ilcode">onChange</span> or <span class="ilcode">onInput</span> events. You would write a function that manipulates the DOM whenever this value changes.</p>
+<p>In Angular, you can use the <span class="ilcode">ng-model</span> directive to handle this behavior. In the code in <b>'/resources/code/ex03/'</b>, you set the <span class="ilcode">ng-model</span> attribute on your input element, and bind the value of the user input to the key 'myValue' on the scope.</p>
+<p>If you play with the rendered code from <b>ex03.html</b>, you'll see that whenever a user enters any content into the input field then the <i>myValue</i> variable (which lives on or will be created on the scope) updates with the new contents. What may not be obvious is that when the value of <i>myValue</i> gets changed elsewhere (that is, not through the user input with the <span class="ilcode">ng-model</span> attribute), that change will be reflected in the input field too. This is because ng-model uses <i>two way data binding</i>.</p>
+
+
+
+<p>To see that this is true, let's use a new built-in Angular directive: <span class="ilcode">ng-click</span>. You'll use this to create a button that, when clicked, will change the the myValue property.</p>
+<p>If you play with code in <b>'/resources/code/ex04/'</b>, you'll see that when you click the button, the input field's value gets set to "some other value".</p>
+<p>In an earlier example, you saw <span class="ilcode">ng-repeat</span> used to render a list of numbers in the HTML template. Let's return to that example, keeping in mind that <span class="ilcode">ng-click</span> allows users to manipulate the numbers array on the fly. You'll create two more buttons that modify the list of numbers using <span class="ilcode">.push()</span> and <span class="ilcode">.pop()</span>.</p>
+<p>Play around with the code in <b>'/resources/code/ex05/'</b> and you'll see that when you click the "Pop" and "Push" buttons, the list of numbers gets smaller or larger.</p>
+<h3>Try It</h3>
+<p>Try adding a clear button to the above example which removes all of the numbers from the list.</p>
+<h2>Filtering Data in Templates</h2>
+<p>At this point, you've seen how you can use directives like <span class="ilcode">ng-click</span> and <span class="ilcode">ng-model</span> to allow users to manipulate data and have the HTML automatically re-render. What if you wanted to filter a list of values, then only display something in your HTML if it met certain conditions? One way to achieve this is by using Angular's filters.</p>
+<p>Let's return to the example which allowed users to push and pop to a list and updated the HTML accordingly. Add an <span class="ilcode">ng-model</span> input where users can supply a value, and then filter your <span class="ilcode">ng-repeat</span> directive by whatever value the user has set in <i>myValue</i>.</p>
+<p>The code example in <b>'/resources/code/ex06/'</b> uses one of Angular’s built in filters. This filter happens to be called <i>filter</i>, and its purpose is to allow you to filter a collection of items based on some condition. If you play with this example, you'll see that now if you enter a value in the input, <span class="ilcode">ng-repeat</span> will display elements only if they are equal to what you've set in the input. Angular has many other built in filters, and you can also create your own. You'll learn more about filters later in Unit 1 of this course.</p>
+<h3>Try It</h3>
+<p>Try using Angular's <span class="ilcode">currency</span> filter to display the elements of the list as if they were amounts of money.</p>
+<h2>Conditionally Displaying HTML Content with ng-if and ng-switch</h2>
+<p>Modern web apps require showing, hiding, adding, and removing components on a page, but HTML is not designed to do this. For many years, developers have used raw JavaScript or jQuery to listen for user input events and show, hide, or entirely remove DOM content in response to events. Although Angular is a JavaScript framework, much of its functionality feels like it simply extends HTML with additional useful tags and elements.</p>
+<p>Angular contains a variety of helpful built in directives to dynamically alter what shows up on the page. When combined with an event directive such as <span class="ilcode">ng-click</span>, magic happens. Together with <span class="ilcode">ng-model</span>, let's use a new built in directive, <span class="ilcode">ng-if</span>, to conditionally display a message on screen if the user typed in the value "5" into the search field.</p>
+<p>If you play with the example found in <b>'/resources/code/ex07/'</b>, you'll see that "You have entered 5" will display if and only if you input set myValue to be "5" in the input field. If you haven’t input anything, or you input something other than 5, then the appropriate message is displayed.</p>
+<p>Although <span class="ilcode">ng-if</span> and <span class="ilcode">ng-repeat</span> do different things, their core purpose is much the same -- to manipulate the DOM based on some underlying data or conditions. An HTML element that has the <span class="ilcode">ng-if</span> directive set on it will display if the expression <span class="ilcode">ng-if</span> is set to evaluates to true. If it evaluates to false, that element will not display.</p>
+<p><span class="ilcode">ng-if</span> is well suited for situations where you have two options (display one thing or another), but what if you have more than two cases? Angular's built-in <span class="ilcode">ng-switch</span> directive is designed to handle this situation. If you've ever used a switch statement in JavaScript, this pattern should be familiar to you.</p>
+<p>If you play with the example found in <b>'/resources/code/ex08/'</b>, you'll see that when you input 5 or 10 in the input, the expected response is displayed from the <span class="ilcode">ng-switch</span> block. If you enter any other value (including not entering a value at all), you'll see the default message.</p>
+<p>You can use this approach to show and hide entire tabs based on user inputs. In the next example, you'll create a page with two links, one for numbers and one for form. When the user clicks on numbers, a div displaying the integers in the numbers array will be rendered. When the user clicks on form, a div with a form will display where the user can input a number to filter the numbers list by. To accomplish this, you could use either <span class="ilcode">ng-if</span> or <span class="ilcode">ng-switch</span>. Use ng-switch for now. There's an example in <b>'/resources/code/ex09/'</b>.</p>
+<p>Now the <span class="ilcode">ng-switch</span> directive will reveal the matching <span class="ilcode">ng-switch-when</span> container depending on the value of its expression (in this case <span class="ilcode">tab</span>). In other words if the value of tab is equal to 'numbers', the <span class="ilcode">ng-switch-when="numbers"</span> div will display, and if the value of tab is equal to 'form' then the <span class="ilcode">ng-switch-when="form"</span> div will display. You'll return the numbers and form interface in the next example, as well as use <span class="ilcode">ng-class</span> to dynamically set CSS classes.</p>
+<h3>Try It</h3>
+<p>Try adding a third tab to the example above using <span class="ilcode">ng-switch</span>.</p>
+
+<h2>Dynamically Setting CSS Classes with ng-class</h2>
+<p>One popular feature in websites is to highlight the tab that is active. Typically this is done using a special CSS class that is applied to the element that is considered "active". In Angular, you can use the <span class="ilcode">ng-class</span> directive to accomplish this.</p>
+<p>If you play with the example found in <b>'/resources/code/ex10/'</b>, you'll see that now when you click on the <i>numbers</i> link, that element will get a red background, and the same is true for the <i>form</i> link. With <span class="ilcode">ng-class</span>, you are able to dynamically set CSS classes.</p>
+<p>Let's add the numbers and form interfaces back in to your page to round out this example and put layout-altering behavior into perspective.</p>
+<p>If you play with the example found in <b>'/resources/code/ex11/'</b>, you see that now if you click the push or pop buttons when you’re in the form tab, the app pushes or pops to the numbers list and switches view back to the numbers tab so you can see the result.</p>
+<p>For the buttons you have:</p>
+
+<pre>
+  <code class="html">
+    &ltdiv ng-switch-when="form"&gt
+      &ltbutton ng-click="numbers.pop(); tab = 'numbers'"&gtPop&lt/button&gt
+      &ltbutton ng-click="numbers.push(numbers.length); tab = 'numbers'"&gtPush&lt/button&gt
+    &lt/div&gt
+  </code>
+</pre>
+
+<p>The use of <span class="ilcode">tab</span> here on both buttons refers to the same <span class="ilcode">tab</span> object above them on in the view. <span class="ilcode">numbers.pop()</span>; here refers to the numbers scope variable and calls the <span class="ilcode">pop()</span> method of the array. If this sounds confusing, don’t worry, it will be clear later in this Unit.</p>
+<h3>Try It</h3>
+<p>Try using <span class="ilcode">ng-class</span> to set the background of the displayed numbers to be yellow when a user enters the number 5 into the filter bar.</p>
+
+
+
+<h2>How can I collect and store data from the user?</h2>
+<p>No discussion of templating and data binding would be complete without saying a few words about HTML forms in Angular. You'll learn about working with forms at length later in this course, but for now let's just look at Angular's scope system to store data collected from forms.</p>
+<p>Let's revisit the form part of the interface from before. You were able to pop and push to the numbers array, but couldn't enter a number and append it to the array. Let's use <span class="ilcode">ng-model</span> along with the <span class="ilcode">ng-submit</span> directive to implement this functionality.</p>
+<p>If you play with the example found in <b>'/resources/code/ex12/'</b>, you'll see that now when you click the form tab, you can input a number. If you submit the number you will see back on the numbers tab that the number you just submitted has been appended to the DOM. Let's break down what's happening the in the form. That part of the code looks like this:</p>
+
+
+<pre>
+  <code class="html">
+   &ltdiv ng-switch-when="form"&gt
+    &ltform ng-submit="numbers.push(myNumber); "&gt
+      &ltinput type="number" ng-model="myNumber" required /&gt
+      &ltinput type="submit" /&gt
+    &lt/form&gt
+    &ltbutton ng-click="numbers.pop();"&gtPop&lt/button&gt
+    &ltbutton ng-click="numbers.push(numbers.length);"&gtPush&lt/button&gt
+  &lt/div&gt
+  </code>
+</pre>
+
+<p>There are a number of things going on in this code that warrant commenting. First, note that HTML5 input element is being used and the type is set equal to number (if you need a refresher on this, look here). Setting the input type to number prevents users from submitting non-numeric values in this field. AngularJS fully understands that the input is a number, and it will parse the data from this input as a number value when it assigns the value to myNumber on the scope. You're also using the HTML5 required attribute to ensure that users don't submit blank values. If you try submitting a blank value, you can see that the browser complains and asks you to supply a value.</p>
+<p>This form also uses a built-in directive you haven't yet encountered: <span class="ilcode">ng-submit</span>. You've used <span class="ilcode">ng-model</span> on the first input in the form to have it bind to myNumber. The <span class="ilcode">ng-submit</span> code causes the myNumber value to be appended to the numbers array. Note that using <span class="ilcode">ng-submit</span> causes Angular to intercept the form submission event, which would normally be directed to a server. Instead, Angular collects the data and handles it locally.</p>
+<p>When you were playing with the example above, you may have noticed that when a new number was submitted, although it did get pushed onto the numbers array, the entered value remains in the input field. The ideal behavior would be for the input to clear after the user has submitted data. You can achieve this by setting myNumber to null after it gets pushed into the numbers array. You can modify the <span class="ilcode">ng-submit</span> expression in the opening form tag so it looks like this <span class="ilcode">&ltform ng-submit="numbers.push(myNumber); myNumber = null;&gt</span></p>
+<p>The code found in <b>'/resources/code/ex13/'</b> shows that change.</p>
+<p>As you can see, if you click submit and then go back to the form tab, the input field is cleared.</p>
+<h2>Summing Up</h2>
+<p>At this point, you should have a good understanding of how to use data binding, templating, and several of Angular's built in directives. This lesson focused on the parts of Angular that serve mainly as extensions of HTML. While these parts of Angular are powerful, to create the rich and dynamic single page web apps you're here for, you'll need to learn how to work with modules, controllers, and services in Angular, and all of these require JavaScript code. This has just been the tip of the iceberg for AngularJS. </p>
+<h4><a href="../index.html">MVC Module Home Page</a></h4>
+
+
+</body>
+</html>

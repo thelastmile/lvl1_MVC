@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html ng-app="">
+
+  <head>
+    <script src="../../lib/angular.js"></script>
+    <link rel="stylesheet" type="text/css" href="ex02.css">
+  </head>
+
+  <body ng-init="numbers=[0,1,2,3,4,5]">
+    <div class="big-text" ng-repeat="number in numbers">
+      <h1>{{ number }}</h1>
+    </div>
+  </body>
+
+</html>

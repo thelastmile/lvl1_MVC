@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html ng-app="">
+
+  <head>
+     <link rel="stylesheet" type="text/css" href="ex08.css">
+    <script src="../../lib/angular.js"></script>
+  </head>
+
+  <body>
+    <input type="text" ng-model="myValue" />
+    <div ng-switch="myValue">
+      <div ng-switch-when="5" class="pass">You have entered 5</div>
+      <div ng-switch-when="10" class="pass">You have entered 10</div>
+      <div ng-switch-default="" class="fail">You haven't entered anything or entered something other than 5 or 10</div>
+    </div>
+  </body>
+
+</html>

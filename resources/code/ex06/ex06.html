@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html ng-app="">
+
+  <head>
+    <script src="../../lib/angular.js"></script>
+  </head>
+
+  <body ng-init="numbers=[0,1,2,3,4,5]">
+    <input type="text" ng-model="myValue" />
+    <h1 ng-repeat="number in numbers | filter:myValue">{{ number }}</h1>
+    <button ng-click="numbers.pop()">Pop</button>
+    <button ng-click="numbers.push(numbers.length)">Push</button>
+  </body>
+
+</html>
